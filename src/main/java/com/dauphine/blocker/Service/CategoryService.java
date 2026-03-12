@@ -12,4 +12,5 @@ public interface CategoryService {
     Category createCategory(String name);
     Category updateCategory(UUID id, String name);
     void deleteCategory(UUID id);
+    List<Category> FindAllLikeName(String name);
 }

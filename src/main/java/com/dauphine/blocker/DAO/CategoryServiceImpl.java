@@ -4,19 +4,32 @@ import com.dauphine.blocker.Repository.CategoryRepository;
 import com.dauphine.blocker.Service.CategoryService;
 import com.dauphine.blocker.Model.Category;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository repository;
+    private final CategoryService categoryService;
 
 
-    public CategoryServiceImpl(CategoryRepository repository) {
+    public CategoryServiceImpl(CategoryRepository repository, CategoryService categoryService) {
         this.repository = repository;
+        this.categoryService = categoryService;
     }
+    public List<Category> getAllCategories(@RequestParam(required = false) String name)
+
+    {
+
+List<Category> categories = name == null ||  name.isBlank()
+        ? categoryService .getAllCategories()
+        : categoryService.FindAllLikeName(name);
+    return categories;
+    }
+
 
     @Override
     public List<Category> getAllCategories() {
@@ -46,4 +59,11 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(UUID id) {
      repository.deleteById(id);
     }
+
+    @Override
+    public List<Category> FindAllLikeName(String name) {
+        return repository.FindAllLikeName(name);
+    }
+
+
 }

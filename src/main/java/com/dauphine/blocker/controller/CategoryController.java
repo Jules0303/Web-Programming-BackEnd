@@ -45,7 +45,10 @@ public class CategoryController {
         return categoryService.updateCategory(id,name);
     }
 
-
+    @GetMapping("/{name}")
+    public List<Category> FindAllLikeName(@PathVariable String name){
+        return categoryService.FindAllLikeName(name);
+    }
 
 
 }
