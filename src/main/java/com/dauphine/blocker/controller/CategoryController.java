@@ -3,10 +3,8 @@ package com.dauphine.blocker.controller;
 
 import com.dauphine.blocker.Model.Category;
 import com.dauphine.blocker.Service.CategoryService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,33 +19,38 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getAllCategories(){
-        return categoryService.getAllCategories();
+    public ResponseEntity<List<Category>> getAllCategories(){
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable UUID id){
-        return categoryService.getCategoryById(id);
+    public ResponseEntity<Category> getCategoryById(@PathVariable UUID id)
+    {
+        Category cat = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(cat);
     }
 
-    @GetMapping("/create")
-    public Category createCategory(String name){
-        return categoryService.createCategory(name);
+    @PostMapping
+    public ResponseEntity<Category> createCategory(@RequestBody Category categoryRequest){
+        Category category = categoryService.createCategory(categoryRequest.getName());
+        return ResponseEntity.status(201).body(category);
     }
 
-    @GetMapping("/delete/{id}")
-    public void deleteCategory(@PathVariable UUID id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable UUID id){
         categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/update/{id}")
-    public Category updateCategory(@PathVariable UUID id, String name){
-        return categoryService.updateCategory(id,name);
+    @PutMapping("/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable UUID id, @RequestBody Category categoryRequest){
+        Category category = categoryService.updateCategory(id, categoryRequest.getName());
+        return ResponseEntity.ok(category);
     }
 
-    @GetMapping("/{name}")
-    public List<Category> FindAllLikeName(@PathVariable String name){
-        return categoryService.FindAllLikeName(name);
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<Category>> FindAllLikeName(@PathVariable String name){
+        return ResponseEntity.ok(categoryService.FindAllLikeName(name));
     }
 
 

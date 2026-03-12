@@ -2,9 +2,8 @@ package com.dauphine.blocker.controller;
 
 import com.dauphine.blocker.BlockerBoxBackendApplication;
 import com.dauphine.blocker.Model.Post;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,39 +18,42 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/create")
-    public Post CreatePost(Post post){
-        return postService.createPost(post.getId(),post.getName(),post.getDescription());
+    @PostMapping
+    public ResponseEntity<Post> CreatePost(@RequestBody Post post){
+        Post createdPost = postService.createPost(post.getId(), post.getName(), post.getDescription());
+        return ResponseEntity.status(201).body(createdPost);
     }
 
     @GetMapping("/{id}")
-    public Post GetPostbyId(UUID id){
-        return postService.getPostById(id);
+    public ResponseEntity<Post> GetPostbyId(@PathVariable UUID id){
+        return ResponseEntity.ok(postService.getPostById(id));
     }
 
-    @GetMapping("/delete/{id}")
-    public void DeletePost(UUID id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> DeletePost(@PathVariable UUID id){
         postService.deletePost(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/update/{id}")
-    public Post UpdatePost(UUID id, String name){
-        return postService.updatePost(id,name);
+    @PutMapping("/{id}")
+    public ResponseEntity<Post> UpdatePost(@PathVariable UUID id, @RequestBody Post postRequest){
+        return ResponseEntity.ok(postService.updatePost(id, postRequest.getName()));
     }
 
-    @GetMapping("/deleteAll")
-    public void DeleteAllPost(){
+    @DeleteMapping
+    public ResponseEntity<Void> DeleteAllPost(){
         postService.deleteAllPosts();
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/getAll")
-    public List<Post> GetAllPost(){
-        return postService.GetAll();
+    @GetMapping
+    public ResponseEntity<List<Post>> GetAllPost(){
+        return ResponseEntity.ok(postService.GetAll());
     }
 
-    @GetMapping("/getAllbyCategory/{id}")
-    public List<Post> GetAllPostbyCategory(UUID id){
-        return postService.GetAllbyCategory(id);
+    @GetMapping("/category/{id}")
+    public ResponseEntity<List<Post>> GetAllPostbyCategory(@PathVariable UUID id){
+        return ResponseEntity.ok(postService.GetAllbyCategory(id));
     }
 
 }

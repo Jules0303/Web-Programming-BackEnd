@@ -1,5 +1,7 @@
 package com.dauphine.blocker.DAO;
 
+import com.dauphine.blocker.exception.BadRequestException;
+import com.dauphine.blocker.exception.PostNotFoundException;
 import com.dauphine.blocker.BlockerBoxBackendApplication;
 import com.dauphine.blocker.Model.Post;
 import com.dauphine.blocker.Repository.PostRepository;
@@ -22,25 +24,31 @@ public class PostServiceImpl implements BlockerBoxBackendApplication.PostService
 
     @Override
     public Post createPost(UUID id, String name, String description) {
-        Post post = new Post(name, id);
+        if (name == null || name.isBlank()) {
+            throw new BadRequestException("Post name cannot be empty");
+        }
+        Post post = new Post(name, id != null ? id : UUID.randomUUID());
         post.setDescription(description);
         return repository.save(post);
     }
 
     @Override
     public Post getPostById(UUID id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElseThrow(() -> new PostNotFoundException("Post with id " + id + " not found"));
     }
 
     @Override
     public void deletePost(UUID id) {
-        repository.deleteById(id);
+        Post post = getPostById(id);
+        repository.delete(post);
     }
 
     @Override
     public Post updatePost(UUID id, String name) {
+        if (name == null || name.isBlank()) {
+            throw new BadRequestException("Post name cannot be empty");
+        }
         Post post = getPostById(id);
-        if(post == null){return null;}
         post.setName(name);
         return repository.save(post);
     }
