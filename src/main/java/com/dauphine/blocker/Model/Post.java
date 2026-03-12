@@ -1,5 +1,6 @@
 package com.dauphine.blocker.Model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,6 +22,7 @@ public class Post {
     private UUID id;
 
     @Column(name = "created_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime date;
 
     @ManyToOne

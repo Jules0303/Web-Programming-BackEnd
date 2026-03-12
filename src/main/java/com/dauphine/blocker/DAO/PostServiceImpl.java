@@ -2,6 +2,7 @@ package com.dauphine.blocker.DAO;
 
 import com.dauphine.blocker.BlockerBoxBackendApplication;
 import com.dauphine.blocker.Model.Post;
+import com.dauphine.blocker.Repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,12 +14,9 @@ import java.util.UUID;
 public class PostServiceImpl implements BlockerBoxBackendApplication.PostService {
 
 
-    private final List<Post> posts;
-    public PostServiceImpl() {
-        this.posts = new ArrayList<>();
-        posts.add( new Post("Post 1", UUID.randomUUID()));
-        posts.add( new Post("Post 2", UUID.randomUUID()));
-        posts.add( new Post("Post 3", UUID.randomUUID()));
+    private final PostRepository repository;
+    public PostServiceImpl(PostRepository repository) {
+        this.repository=repository;
     }
 
 
@@ -26,38 +24,40 @@ public class PostServiceImpl implements BlockerBoxBackendApplication.PostService
     public Post createPost(UUID id, String name, String description) {
         Post post = new Post(name, id);
         post.setDescription(description);
-        posts.add(post);
-        return post;
+        return repository.save(post);
     }
 
     @Override
     public Post getPostById(UUID id) {
-        return posts.stream().filter(post -> post.getId().equals(id)).findFirst().orElse(null);
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public void deletePost(UUID id) {
-        posts.removeIf(post -> post.getId().equals(id));
+        repository.deleteById(id);
     }
 
     @Override
     public Post updatePost(UUID id, String name) {
-        posts.stream().filter(post -> post.getId().equals(id)).findFirst().ifPresent(post -> post.setName(name));
-        return getPostById(id);
+        Post post = getPostById(id);
+        if(post == null){return null;}
+        post.setName(name);
+        return repository.save(post);
     }
 
     @Override
     public void deleteAllPosts() {
-        posts.clear();
+
+        repository.deleteAll();
     }
 
     @Override
     public List<Post> GetAll() {
-       return posts;
+       return repository.findAll();
     }
 
     @Override
     public List<Post> GetAllbyCategory(UUID CategoryID) {
-        return Collections.singletonList(posts.stream().filter(post -> post.getCategoryId().equals(CategoryID)).findFirst().orElse(null));
+        return repository.findAllByCategory_Id(CategoryID);
     }
 }
