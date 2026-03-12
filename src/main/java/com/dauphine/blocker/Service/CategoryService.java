@@ -1,4 +1,6 @@
-package com.dauphine.blocker;
+package com.dauphine.blocker.Service;
+
+import com.dauphine.blocker.Model.Category;
 
 import java.util.List;
 import java.util.UUID;

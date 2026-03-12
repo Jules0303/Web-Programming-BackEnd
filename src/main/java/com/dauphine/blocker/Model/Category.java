@@ -1,20 +1,30 @@
-package com.dauphine.blocker;
+package com.dauphine.blocker.Model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.UUID;
 
+
+@Entity
+@Table(name = "category")
 public class Category {
 
-
+    @Column(name = "name")
     private String name;
-    private String description;
+    @Id
+    @Column(name = "category_id")
     private UUID id;
-    private DateTimeFormat date;
-
     public Category(UUID id, String name) {
         this.name = name;
         this.id = id;
+    }
+
+    public Category() {
+
     }
 
     public String getName() {
@@ -25,13 +35,6 @@ public class Category {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public UUID getId() {
         return id;
@@ -41,11 +44,5 @@ public class Category {
         this.id = id;
     }
 
-    public DateTimeFormat getDate() {
-        return date;
-    }
 
-    public void setDate(DateTimeFormat date) {
-        this.date = date;
-    }
 }

@@ -1,5 +1,7 @@
-package com.dauphine.blocker;
+package com.dauphine.blocker.DAO;
 
+import com.dauphine.blocker.BlockerBoxBackendApplication;
+import com.dauphine.blocker.Model.Post;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class PostServiceImpl implements PostService{
+public class PostServiceImpl implements BlockerBoxBackendApplication.PostService {
 
 
     private final List<Post> posts;

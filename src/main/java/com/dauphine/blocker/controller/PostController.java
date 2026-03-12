@@ -1,5 +1,7 @@
-package com.dauphine.blocker;
+package com.dauphine.blocker.controller;
 
+import com.dauphine.blocker.BlockerBoxBackendApplication;
+import com.dauphine.blocker.Model.Post;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +14,8 @@ import java.util.UUID;
 @RequestMapping("/v1/posts")
 public class PostController {
 
-    private final PostService postService;
-    public PostController(PostService postService) {
+    private final BlockerBoxBackendApplication.PostService postService;
+    public PostController(BlockerBoxBackendApplication.PostService postService) {
         this.postService = postService;
     }
 

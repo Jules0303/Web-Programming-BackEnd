@@ -1,10 +1,14 @@
 package com.dauphine.blocker;
 
+import com.dauphine.blocker.Model.Post;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.util.List;
+import java.util.UUID;
 
 @SpringBootApplication
 @OpenAPIDefinition(
@@ -22,4 +26,16 @@ public class BlockerBoxBackendApplication {
 		SpringApplication.run(BlockerBoxBackendApplication.class, args);
 	}
 
+	public static interface PostService {
+
+		public Post createPost(UUID id, String name, String description);
+		public Post getPostById(UUID id);
+		public void deletePost(UUID id);
+		public Post updatePost(UUID id, String name);
+		public void deleteAllPosts();
+		public List<Post> GetAll();
+		public List<Post> GetAllbyCategory(UUID CategoryID);
+
+
+	}
 }
