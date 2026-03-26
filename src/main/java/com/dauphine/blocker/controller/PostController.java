@@ -20,7 +20,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> CreatePost(@RequestBody Post post){
-        Post createdPost = postService.createPost(post.getId(), post.getName(), post.getDescription());
+        Post createdPost = postService.createPost(post.getId(), post.getName(), post.getDescription(), post.getCategoryId());
         return ResponseEntity.status(201).body(createdPost);
     }
 
@@ -37,7 +37,7 @@ public class PostController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Post> UpdatePost(@PathVariable UUID id, @RequestBody Post postRequest){
-        return ResponseEntity.ok(postService.updatePost(id, postRequest.getName()));
+        return ResponseEntity.ok(postService.updatePost(id, postRequest.getName(), postRequest.getDescription(), postRequest.getCategoryId()));
     }
 
     @DeleteMapping

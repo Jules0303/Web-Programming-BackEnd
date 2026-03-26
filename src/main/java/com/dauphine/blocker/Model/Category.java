@@ -16,7 +16,7 @@ public class Category {
     @Column(name = "name")
     private String name;
     @Id
-    @Column(name = "category_id")
+    @Column(name = "id")
     private UUID id;
     public Category(UUID id, String name) {
         this.name = name;

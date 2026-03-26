@@ -17,18 +17,28 @@ public class PostServiceImpl implements BlockerBoxBackendApplication.PostService
 
 
     private final PostRepository repository;
-    public PostServiceImpl(PostRepository repository) {
-        this.repository=repository;
+    private final com.dauphine.blocker.Repository.CategoryRepository categoryRepository;
+
+    public PostServiceImpl(PostRepository repository, com.dauphine.blocker.Repository.CategoryRepository categoryRepository) {
+        this.repository = repository;
+        this.categoryRepository = categoryRepository;
     }
 
 
     @Override
-    public Post createPost(UUID id, String name, String description) {
+    public Post createPost(UUID id, String name, String description, UUID categoryId) {
         if (name == null || name.isBlank()) {
             throw new BadRequestException("Post name cannot be empty");
         }
         Post post = new Post(name, id != null ? id : UUID.randomUUID());
         post.setDescription(description);
+        
+        if (categoryId != null) {
+            com.dauphine.blocker.Model.Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new BadRequestException("Category with id " + categoryId + " not found"));
+            post.setCategory(category);
+        }
+        
         return repository.save(post);
     }
 
@@ -44,12 +54,23 @@ public class PostServiceImpl implements BlockerBoxBackendApplication.PostService
     }
 
     @Override
-    public Post updatePost(UUID id, String name) {
+    public Post updatePost(UUID id, String name, String description, UUID categoryId) {
         if (name == null || name.isBlank()) {
             throw new BadRequestException("Post name cannot be empty");
         }
         Post post = getPostById(id);
         post.setName(name);
+        
+        if (description != null) {
+            post.setDescription(description);
+        }
+        
+        if (categoryId != null) {
+            com.dauphine.blocker.Model.Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new BadRequestException("Category with id " + categoryId + " not found"));
+            post.setCategory(category);
+        }
+        
         return repository.save(post);
     }
 

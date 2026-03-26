@@ -28,10 +28,10 @@ public class BlockerBoxBackendApplication {
 
 	public static interface PostService {
 
-		public Post createPost(UUID id, String name, String description);
+		public Post createPost(UUID id, String name, String description, UUID categoryId);
 		public Post getPostById(UUID id);
 		public void deletePost(UUID id);
-		public Post updatePost(UUID id, String name);
+		public Post updatePost(UUID id, String name, String description, UUID categoryId);
 		public void deleteAllPosts();
 		public List<Post> GetAll();
 		public List<Post> GetAllbyCategory(UUID CategoryID);

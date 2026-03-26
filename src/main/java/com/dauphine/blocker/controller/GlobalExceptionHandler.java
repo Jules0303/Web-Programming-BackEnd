@@ -31,7 +31,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGlobalException(Exception ex){
+        ex.printStackTrace();
         logger.severe(ex.getMessage());
-        return ResponseEntity.status(500).body("An unexpected error occurred");
+        return ResponseEntity.status(500).body(ex.toString() + "\n" + java.util.Arrays.toString(ex.getStackTrace()));
     }
 }

@@ -23,11 +23,14 @@ public class Post {
 
     @Column(name = "created_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Transient
+    private UUID categoryId;
 
     public Post(String name, UUID id) {
         this.name = name;
@@ -71,6 +74,18 @@ public class Post {
     }
 
     public UUID getCategoryId() {
-        return category.getId();
+        return category != null ? category.getId() : categoryId;
+    }
+
+    public void setCategoryId(UUID categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
